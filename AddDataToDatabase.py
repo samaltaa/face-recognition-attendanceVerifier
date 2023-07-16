@@ -21,7 +21,27 @@ data = {
             "Standing": "Probationary",
             "Year": 9,
             "Last Attendance Time": "07/13/2023 00:59:34"
-        }
+        },
+    "852741":
+        {
+                "Name": "Melanie",
+                "Position": "Customer Service Agent",
+                "Starting Year": "2010",
+                "Total Attendance": 700,
+                "Standing": "Good",
+                "Year": 13,
+                "Last Attendance Time": "07/18/2023 00:59:34"
+            },
+    "1234456":
+        {
+                "Name": "Samira Altagracia",
+                "Position": "Chief Automation Engineer",
+                "Starting Year": "2023",
+                "Total Attendance": 300,
+                "Standing": "Good",
+                "Year": 2,
+                "Last Attendance Time": "07/16/2023 00:59:34"
+            }
 }
 
 # push data to database
