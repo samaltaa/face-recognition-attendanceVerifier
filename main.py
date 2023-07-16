@@ -3,6 +3,7 @@ import pickle
 import cv2
 import face_recognition
 import numpy as np
+import cvzone
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -42,7 +43,7 @@ while True:
     encodeCurrentFrame = face_recognition.face_encodings(imgS, faceCurrentFrame)
 
     imgBackground[162:162 + 480, 55:55 + 640] = img
-    imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[3]
+    imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[1]
 
     # use the zip method to iterate both arrays
     # extract encoding and location of the face in frame
@@ -56,9 +57,15 @@ while True:
         print("Match Index", matchIndex)
 
         if matches[matchIndex]:
-            print("Known Face Detected")
+            print("Known Face Detected", matchIndex)
+            print(studentIds[matchIndex])
         elif matches != True:
-            print("unknown face")
+            print("Unknown Face Detected", matchIndex)
+            y1, x2, y2, x1 = faceLocation
+            # we have to multiply it by 4 because in line 38 we reduced the size by 4
+            y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
+            bbox = 55+x1, 162+y1, x2-x1, y2-y1
+            imgBackground = cvzone.cornerRect(imgBackground, bbox, rt= 0)
 
     # cv2.imshow("Face Recognition", img)
     cv2.imshow("Registry", imgBackground)

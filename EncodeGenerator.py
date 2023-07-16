@@ -11,10 +11,7 @@ imgList = []
 studentIds =[]
 
 for path in PathList:
-    # add image that has been imported
     imgList.append(cv2.imread(os.path.join(FolderPath, path)))
-    # print(path)
-    # print(os.path.splitext(path)[0])
     studentIds.append(os.path.splitext(path)[0])
 print(studentIds)
 
