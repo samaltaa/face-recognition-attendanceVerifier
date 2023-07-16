@@ -67,12 +67,7 @@ while True:
         # print("Match Index", matchIndex)
 
         if matches[matchIndex]:
-            # print("Known Face Detected", matchIndex)
-            print(studentIds[matchIndex])
 
-
-        elif matches != True:
-            # print("Unknown Face Detected", matchIndex)
             y1, x2, y2, x1 = faceLocation
             # we have to multiply it by 4 because in line 38 we reduced the size by 4
             y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
