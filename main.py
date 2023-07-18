@@ -55,7 +55,7 @@ while True:
     encodeCurrentFrame = face_recognition.face_encodings(imgS, faceCurrentFrame)
 
     imgBackground[162:162 + 480, 55:55 + 640] = img
-    imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[3]
+    imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[modeType]
 
     # use the zip method to iterate both arrays
     # extract encoding and location of the face in frame
@@ -78,12 +78,33 @@ while True:
             # set counter to capture face encoding once in the first frame
             if counter == 0:
                 counter = 1
+                modeType = 1
     if counter != 0:
         if counter == 1:
             # download data of first frame
             studentInfo = db.reference(f'Employees/{id}').get()
             print(studentInfo)
+        # add the student/employee info to the GUI
+        cv2.putText(imgBackground, str(studentInfo['Total Attendance']), (861, 125),
+                    cv2.FONT_HERSHEY_COMPLEX, 1,(255, 255, 255), 1)
 
+        cv2.putText(imgBackground, str(studentInfo['Name']), (808, 445),
+                    cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 50), 1)
+
+        cv2.putText(imgBackground, str(studentInfo['Position']), (1006, 550),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+
+        cv2.putText(imgBackground, str(id), (1006, 493),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+
+        cv2.putText(imgBackground, str(studentInfo['Standing']), (910, 625),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+
+        cv2.putText(imgBackground, str(studentInfo['Year']), (1025, 625),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+
+        cv2.putText(imgBackground, str(studentInfo['Starting Year']), (1125, 625),
+                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
 
         counter += 1
 
