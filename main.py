@@ -8,6 +8,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import storage
+import numpy as np
 
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred, {
@@ -15,6 +16,7 @@ firebase_admin.initialize_app(cred, {
     'storageBucket':"facedata-3a93d.appspot.com"
 })
 
+bucket = storage.bucket()
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
@@ -43,6 +45,7 @@ print("Encoded File Loaded!")
 modeType = 0
 counter = 0
 id = -1
+imgStudent =[]
 
 while True:
     success, img = cap.read()
@@ -80,16 +83,20 @@ while True:
                 counter = 1
                 modeType = 1
     if counter != 0:
+        # download data
         if counter == 1:
-            # download data of first frame
+
             studentInfo = db.reference(f'Employees/{id}').get()
             print(studentInfo)
+            # get image from storage in database
+            blob = bucket.get_blob(f'Images/{id}.png')
+            array = np.frombuffer(blob.download_as_string(), np.uint8)
+            imgStudent = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
+
+
         # add the student/employee info to the GUI
         cv2.putText(imgBackground, str(studentInfo['Total Attendance']), (861, 125),
                     cv2.FONT_HERSHEY_COMPLEX, 1,(255, 255, 255), 1)
-
-        cv2.putText(imgBackground, str(studentInfo['Name']), (808, 445),
-                    cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 50), 1)
 
         cv2.putText(imgBackground, str(studentInfo['Position']), (1006, 550),
                     cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
@@ -105,6 +112,13 @@ while True:
 
         cv2.putText(imgBackground, str(studentInfo['Starting Year']), (1125, 625),
                     cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+
+        (w,h), _ = cv2.getTextSize(studentInfo['Name'], cv2.FONT_HERSHEY_COMPLEX, 1,1)
+        offset = (414-w)//2
+        cv2.putText(imgBackground, str(studentInfo['Name']), (808 + offset, 445),
+                    cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 50), 1)
+
+        imgBackground[175:175+216, 909:909+216] = imgStudent
 
         counter += 1
 
