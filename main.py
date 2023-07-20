@@ -2,7 +2,6 @@ import os
 import pickle
 import cv2
 import face_recognition
-import numpy as np
 import cvzone
 import firebase_admin
 from firebase_admin import credentials
@@ -93,34 +92,52 @@ while True:
             array = np.frombuffer(blob.download_as_string(), np.uint8)
             imgStudent = cv2.imdecode(array, cv2.COLOR_BGRA2BGR)
 
+            # update attendance data
+            ref = db.reference(f'Employees/{id}')
+            studentInfo['Total Attendance'] += 1
+            ref.child('Total Attendance').set(studentInfo['Total Attendance'])
 
-        # add the student/employee info to the GUI
-        cv2.putText(imgBackground, str(studentInfo['Total Attendance']), (861, 125),
-                    cv2.FONT_HERSHEY_COMPLEX, 1,(255, 255, 255), 1)
+        if 10<counter<20:
+            modeType = 2
 
-        cv2.putText(imgBackground, str(studentInfo['Position']), (1006, 550),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+        imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[modeType]
 
-        cv2.putText(imgBackground, str(id), (1006, 493),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
+        if counter <= 10:
 
-        cv2.putText(imgBackground, str(studentInfo['Standing']), (910, 625),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+            # add the student/employee info to the GUI
+            cv2.putText(imgBackground, str(studentInfo['Total Attendance']), (861, 125),
+                        cv2.FONT_HERSHEY_COMPLEX, 1,(255, 255, 255), 1)
 
-        cv2.putText(imgBackground, str(studentInfo['Year']), (1025, 625),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+            cv2.putText(imgBackground, str(studentInfo['Position']), (1006, 550),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
 
-        cv2.putText(imgBackground, str(studentInfo['Starting Year']), (1125, 625),
-                    cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+            cv2.putText(imgBackground, str(id), (1006, 493),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.5, (255, 255, 255), 1)
 
-        (w,h), _ = cv2.getTextSize(studentInfo['Name'], cv2.FONT_HERSHEY_COMPLEX, 1,1)
-        offset = (414-w)//2
-        cv2.putText(imgBackground, str(studentInfo['Name']), (808 + offset, 445),
-                    cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 50), 1)
+            cv2.putText(imgBackground, str(studentInfo['Standing']), (910, 625),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
 
-        imgBackground[175:175+216, 909:909+216] = imgStudent
+            cv2.putText(imgBackground, str(studentInfo['Year']), (1025, 625),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+
+            cv2.putText(imgBackground, str(studentInfo['Starting Year']), (1125, 625),
+                        cv2.FONT_HERSHEY_COMPLEX, 0.6, (100, 100, 100), 1)
+
+            (w,h), _ = cv2.getTextSize(studentInfo['Name'], cv2.FONT_HERSHEY_COMPLEX, 1,1)
+            offset = (414-w)//2
+            cv2.putText(imgBackground, str(studentInfo['Name']), (808 + offset, 445),
+                        cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 50), 1)
+
+            imgBackground[175:175+216, 909:909+216] = imgStudent
 
         counter += 1
+
+        if counter >= 20:
+            counter = 0
+            modeType = 3
+            studentInfo = []
+            imgStudent = []
+            imgBackground[44:44 + 633, 808:808 + 414] = imgModeList[modeType]
 
     cv2.imshow("Registry", imgBackground)
     cv2.waitKey(1)
