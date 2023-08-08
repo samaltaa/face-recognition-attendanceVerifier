@@ -12,7 +12,7 @@ The Facial Recognition Attendance System is a Python-based project that utilizes
 
 1. Clone the repository:
   ```bash
-  git clone https://github.com/your-username/facial-recognition-attendance.git
+  git clone https://github.com/samaltaa/facial-recognition-attendance.git
    ```
 
 2. Navigate to the project directory:
@@ -32,7 +32,7 @@ The Facial Recognition Attendance System is a Python-based project that utilizes
 
 ## Usage
 
-1. Add the images of students to the `students` directory. Make sure each image file is named with the format `<student_name>.jpg` (e.g., `john_doe.jpg`).
+1. Add the images of students to the `students` directory. Make sure each image file is named with the format `name>.jpg` (e.g., `john_doe.jpg`).
 
 2. Run the `encode_faces.py` script to encode the faces and create the face database:
 
