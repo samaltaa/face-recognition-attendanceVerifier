@@ -30,7 +30,7 @@ The Facial Recognition Attendance System is a Python-based project that utilizes
 
 4. Download the Haar Cascade XML file for face detection from [here](https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml) and place it in the `data` directory of the project.
 
-## Usage
+## Use cases 
 
 1. Add the images of students to the `students` directory. Make sure each image file is named with the format `name>.jpg` (e.g., `john_doe.jpg`).
 
